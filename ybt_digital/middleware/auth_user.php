@@ -1,0 +1,20 @@
+<?php
+/**
+ * User Authentication Middleware
+ * Blocks anonymous users from accessing protected pages
+ */
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+    // Store the requested URL for redirection after login
+    $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
+    
+    // Redirect to login page
+    header('Location: ' . BASE_URL . '/auth/login.php');
+    exit;
+}
